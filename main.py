@@ -60,7 +60,8 @@ def layers(vgg_layer3_out, vgg_layer4_out, vgg_layer7_out, num_classes):
 
     # vgg layer 7 1x1 convolution
     layer7_conv_1x1 = tf.layers.conv2d(vgg_layer7_out, num_classes, 1, padding='same',
-                                       kernel_regularizer=tf.contrib.layers.l2_regularizer(1e-3))
+                                       kernel_regularizer=tf.contrib.layers.l2_regularizer(1e-3),
+					kernel_initializer=tf.truncated_normal_initializer(stddev=0.01))
 
     # vgg layer 7 upsample by 2
     layer7_upsample = tf.layers.conv2d_transpose(layer7_conv_1x1, num_classes, 4, strides=(2, 2), padding='same',
@@ -151,7 +152,7 @@ def run():
     image_shape = (160, 576)
     data_dir = './data'
     runs_dir = './runs'
-    epochs = 100
+    epochs = 20
     batch_size = 1
 
     tests.test_for_kitti_dataset(data_dir)
